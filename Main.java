@@ -11,6 +11,7 @@ public class Main {
            System.out.println("0/ Revenir menu principal");
            System.out.println("1/ Afficher les voitures louees ");
            System.out.println("2/ Ajouter une location a un client");
+           System.out.println("3/ Afficher les locations");
            choix = sc.nextInt();
            switch (choix) {
                case 0 : return;
@@ -19,13 +20,23 @@ public class Main {
                case 2 :
                    try {
                        ArrayList<Voiture> voitures = new ArrayList<>();
+                       // Saisit des criteres de recherche de la voiture a louee
                        InterCritere critere = agence.SaisirCriteresVoitures(sc);
                        Iterator it = agence.Selectionne(critere,voitures);
                        if(!it.hasNext()) throw new VoitureInexistenteException();
+                       System.out.println("Saisir donnees du client : ");
+                       Client client = agence.SaisirClient(sc);
+                       agence.loueVoiture(client,(Voiture)it.next());
                    } catch (VoitureInexistenteException e ) {
+                       System.out.println(e);
+                   } catch(VoitureEstLoueeException e) {
+                       System.out.println(e);
+                   } catch(ClientEstLoueurException e) {
                        System.out.println(e);
                    }
                    break;
+               case 3 : agence.AfficherLocation();
+                       break;
            }
        }
     }
